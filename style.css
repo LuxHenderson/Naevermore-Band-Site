@@ -35,7 +35,7 @@
       --show-translate-x: 100px; /* positive moves right, negative moves left */
       --show-translate-y: 0px; /* positive moves down, negative moves up */
       /* Video title positioning helpers: change these to nudge the title */
-      --video-title-translate-x: -285px;
+      --video-title-translate-x: 185px;
       --video-title-translate-y: 0px;
     --video-max-width: 1100px; /* max width for embedded video */
     /* Show-promo box styling: adjust these to change the container box */
@@ -557,6 +557,28 @@ section{padding:3rem 0}
   border:0;
 }
 
+/* YouTube embed wrapper for responsive video */
+.video-wrap-youtube{
+  width:100%;
+  max-width:var(--video-max-width);
+  margin:0 auto;
+  aspect-ratio:16/9;
+  background:#000;
+  border-radius:10px;
+  overflow:hidden;
+  position:relative;
+}
+
+.video-wrap-youtube iframe{
+  width:100%;
+  height:100%;
+  display:block;
+  border:0;
+  position:absolute;
+  top:0;
+  left:0;
+}
+
 /* Thumbnail link shown as fallback when video can't play */
 .video-thumb{display:block;width:100%;height:100%;}
 .video-thumb img{width:100%;height:100%;object-fit:cover;display:block}
@@ -601,6 +623,22 @@ section{padding:3rem 0}
 /* Reset transforms on small screens to avoid layout issues */
 @media (max-width:900px){
   .home-content .next-show{ transform: none; }
+}
+
+/* About page content positioning */
+.show-promo-row .about{
+  flex: 1 1 100%;
+  padding-left: 6.2rem;
+  padding-right: 2rem;
+}
+
+.show-promo-row .about .lead{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width:900px){
+  .show-promo-row .about{ padding-left: 1rem; padding-right: 1rem; }
 }
 
 /* Members grid */
