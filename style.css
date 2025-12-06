@@ -357,6 +357,11 @@ section{padding:3rem 0}
 .show-promo-row .next-show{
   flex: 0 0 auto; /* auto width for the teaser */
 }
+.show-promo-row .next-show .next-show-meta{
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 70ch;
+}
 .show-promo-row .promo{
   flex: 0 0 auto; /* auto width so promo stays next to show */
 }
@@ -410,7 +415,8 @@ section{padding:3rem 0}
 .news-list{
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
+  max-width: 70ch;
 }
 .news-list li{
   padding: 0.5rem 0;
@@ -436,20 +442,30 @@ section{padding:3rem 0}
   justify-content: center; /* center buttons within the section */
 }
 .show-promo-row .social-list a{
-  display: inline-block;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border-radius: 50%;
   text-decoration: none;
-  color: inherit;
-  background: rgb(60, 60, 60); /* Match top nav hover background */
-  transition: transform 150ms ease, background-color 150ms ease;
+  color: #d4af37; /* Gold color */
+  background: #000000; /* Black background */
+  border: 2px solid #d4af37; /* Gold border */
+  transition: transform 150ms ease, background-color 150ms ease, color 150ms ease;
+  font-size: 1.5rem;
 }
 :root[data-theme="dark"] .show-promo-row .social-list a{
-  background: rgb(70, 70, 70); /* Keep consistent in dark mode */
+  background: #000000;
+  color: #d4af37;
+  border-color: #d4af37;
 }
 .show-promo-row .social-list a:hover{
-  transform: translateY(-1px) scale(1.03);
-  background: #8a8a8a; /* Slightly lighter on hover for feedback */
+  transform: translateY(-2px) scale(1.08);
+  background: #d4af37; /* Gold background on hover */
+  color: #000000; /* Black icon on hover */
+  border-color: #d4af37;
 }
 
 /* Booking section inside the show/promo box */
