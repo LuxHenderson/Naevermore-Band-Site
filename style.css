@@ -16,8 +16,8 @@
   --accent: #efefef25; /* accent color for buttons/links */
   --accent-2: #222222; /* dark accent for headings */
 
-  /* Spacing & layout */
-  --container-width: 1100px;
+  /* Spacing & layout - fixed values for cross-browser consistency */
+  --container-width: 1400px;
   --gutter: 1rem;
   --radius: 8px;
 
@@ -27,31 +27,34 @@
     --promo-max-width: 720px; /* Max width for the promo image in the show-promo row */
     /* Promo positioning helpers: change these variables to nudge the promo image
       around without editing the layout rules. Values accept CSS length units. */
-    --promo-translate-x: 380px; /* positive moves right, negative moves left */
+    --promo-translate-x: 400px; /* positive moves right, negative moves left */
     --promo-translate-y: -200px; /* positive moves down, negative moves up */
     --promo-object-position: center; /* controls object-position: left/center/right top/center/bottom */
       /* Upcoming-show positioning helpers: change these variables to nudge the
         upcoming-show block around without editing layout rules. */
       --show-translate-x: 100px; /* positive moves right, negative moves left */
       --show-translate-y: 0px; /* positive moves down, negative moves up */
+      /* Upcoming-show text positioning: controls just the text inside the section */
+      --show-text-translate-x: 160px; /* positive moves text right, negative moves left */
+      --show-text-translate-y: 0px; /* positive moves text down, negative moves up */
       /* Video title positioning helpers: change these to nudge the title */
       --video-title-translate-x: 185px;
       --video-title-translate-y: 0px;
     --video-max-width: 1100px; /* max width for embedded video */
     /* Show-promo box styling: adjust these to change the container box */
-    --show-promo-box-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.025), lab(79.6% 8.78 52.34 / 0.24)); /* matches nav bar */
-    --show-promo-box-padding: 2rem; /* inner spacing */
+    --show-promo-box-bg: linear-gradient(180deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.25)); /* gold gradient */
+    --show-promo-box-padding: 32px; /* inner spacing - fixed pixels */
     --show-promo-box-radius: 12px; /* corner rounding */
     --show-promo-box-max-width: 1400px; /* max width of the box */
     /* Individual promo image positioning helpers */
-    --promo1-translate-x: 681px;
-    --promo1-translate-y: -305px;
+    --promo1-translate-x: 887px;
+    --promo1-translate-y: -280px;
     --promo1-object-position: center;
-    --promo2-translate-x: 453px;
-    --promo2-translate-y: -205px;
+    --promo2-translate-x: 743px;
+    --promo2-translate-y: -175px;
     --promo2-object-position: center;
-    --promo3-translate-x: 228px;
-    --promo3-translate-y: -110px;
+    --promo3-translate-x: 597px;
+    --promo3-translate-y: -75px;
     --promo3-object-position: center;
     --promo-gallery-gap: 1rem;
     --promo-gallery-img-radius: 10px;
@@ -67,9 +70,9 @@
     --promo2-scale: 1;
     --promo3-scale: 1;
     /* Explicit width & height controls (override basis/max if set) */
-    --promo1-width: 13%;
-    --promo2-width: 13%;
-    --promo3-width: 13%;
+    --promo1-width: 10%;
+    --promo2-width: 10%;
+    --promo3-width: 10%;
     --promo1-height: auto;
     --promo2-height: auto;
     --promo3-height: auto;
@@ -85,8 +88,34 @@
 }
 
 /* ========== Global Resets & Base Styles ========== */
-*{box-sizing:border-box}
-html,body{height:100%}
+/* Comprehensive cross-browser normalization for consistent rendering */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  /* Lock base font size to 16px across all browsers */
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape on iOS */
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Ensure consistent line height */
+  line-height: 1.15;
+}
+
+body {
+  height: 100%;
+  min-height: 100%;
+}
 
 /* Three.js fog canvas container - fixed background layer */
 #fog-canvas-container {
@@ -95,7 +124,7 @@ html,body{height:100%}
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* Behind all content */
+  z-index: -2; /* Behind background image */
   pointer-events: none; /* Allow interaction with content above */
   overflow: hidden;
 }
@@ -108,7 +137,11 @@ html,body{height:100%}
 
 body{
   margin:0;
+  padding:0;
   font-family:var(--font-sans);
+  /* Lock font size for cross-browser consistency */
+  font-size: 16px;
+  font-weight: 400;
   /* Use the supplied image as the site's primary background. */
   background-image: url('Nævermore - Ashes and Echoes - 003.jpg');
   /* Fallback/backdrop color shown where the image doesn't cover the viewport */
@@ -120,8 +153,12 @@ body{
   background-attachment: fixed;
   color:var(--text);
   line-height:1.45;
+  /* Cross-browser font smoothing */
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
   /* Custom cursor with gold outline */
   cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 3l14 9-6 1-2 6z" fill="black" stroke="%23d4af37" stroke-width="1.5"/></svg>') 0 0, auto;
 }
@@ -136,8 +173,9 @@ select, input[type="checkbox"], input[type="radio"] {
 /* Utility container used to center page content */
 .container{
   max-width:var(--container-width);
+  width: 100%;
   margin:0 auto;
-  padding:0 1rem;
+  padding:0 16px; /* Fixed pixels for consistency */
 }
 
 /* Header / nav */
@@ -149,50 +187,76 @@ select, input[type="checkbox"], input[type="radio"] {
   backdrop-filter: blur(-6px);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), lab(79.6% 8.78 52.34 / 0.24));
   border-bottom:1px solid rgba(0,0,0,0.06);
+  width: 100%;
+  box-sizing: border-box;
 }
 :root[data-theme="dark"] .site-header{ background: rgba(16,16,18,0.6); border-bottom:1px solid rgba(255,255,255,0.04);} 
 
 .header-inner{
   display:flex;
-  gap:1rem;
+  gap:16px; /* Fixed pixels for cross-browser consistency */
   align-items:center;
   justify-content:space-between;
   /* increase vertical padding so the header sits lower and feels more prominent */
-  padding:1.25rem 0;
+  padding:20px 0; /* Fixed pixels */
+  max-width: 100%;
+  overflow: hidden; /* Prevent content from overflowing */
 }
 .brand .logo{
   font-family:var(--font-display);
   font-weight:700;
   letter-spacing:0.05em; /* Slightly wider for Roman capitals */
-  font-size:1.9rem; /* Enlarged for greater prominence */
+  font-size:30px; /* Fixed size for consistency across all browsers */
   color:#d4af37;
   text-decoration:none;
+  white-space: nowrap; /* Prevent logo from wrapping */
+  line-height: 1;
 }
 
-/* Nudge the brand link (logo) further left without changing container padding globally.
-   Reset on small screens to avoid overflow. */
-.brand{ margin-left: -20rem; } /* Adjust the margin-left variable to move the brand link as needed. */
-@media (max-width:900px){ .brand{ margin-left: 0; } }
+/* Brand stays within container bounds */
+.brand{ 
+  flex-shrink: 0; /* Prevent logo from shrinking */
+}
 @media (max-width:900px){
   .brand .logo{ font-size:1.25rem; }
-  .header-inner{ padding:0.8rem 0; }
+  .header-inner{ padding:0.8rem 0; gap: 0.5rem; }
+  .brand { flex-shrink: 0; }
 }
 
-.main-nav ul{display:flex;gap:0.75rem;margin:0;padding:0;list-style:none}
-.main-nav{ margin-right: -20rem ; } /* Pushes the main navigation buttons to the right */
-.main-nav a{color:#d4af37;text-decoration:none;padding:0.4rem 0.6rem;border-radius:6px}
+.main-nav ul{display:flex;gap:12px;margin:0;padding:0;list-style:none;flex-wrap:nowrap}
+.main-nav{ 
+  flex-shrink: 1; /* Allow nav to shrink if needed */
+  min-width: 0; /* Enable flex shrinking */
+}
+.main-nav a{
+  color:#d4af37;
+  text-decoration:none;
+  padding:6px 10px; /* Fixed pixels */
+  border-radius:6px;
+  font-size:16px; /* Fixed size */
+  white-space: nowrap;
+  line-height: 1;
+}
 .main-nav a:hover{background:rgb(70, 70, 70)}
 
 .menu-toggle{display:none;background:none;border:1px solid rgba(0,0,0,0.06);padding:0.4rem 0.6rem;border-radius:6px}
 
-.search-wrap{flex:1;display:flex;justify-content:flex-end}
+.search-wrap{
+  flex: 0 1 auto; /* Don't force to grow, allow shrinking */
+  display:flex;
+  justify-content:flex-end;
+  min-width: 0;
+  max-width: 220px;
+}
 .site-search{
-  max-width:220px;
-  padding:0.4rem 0.6rem;
+  width: 180px; /* Fixed width */
+  padding:6px 10px; /* Fixed pixels */
   border-radius:6px;
   border:1px solid rgb(0, 0, 0);
   background:var(--panel);
   color:#ffffff; /* Match booking form input text color */
+  font-size:14px; /* Fixed size */
+  line-height: 1.4;
 }
 
 /* Placeholder color: explicit and keep opacity consistent across browsers */
@@ -225,13 +289,13 @@ select, input[type="checkbox"], input[type="radio"] {
   top: 100%;
   right: 0;
   margin-top: 0.5rem;
-  width: 320px;
-  max-height: 400px;
+  width: min(25vw, 320px);
+  max-height: 40vh;
   overflow-y: auto;
   background: var(--panel);
   border: 1px solid rgb(0, 0, 0);
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-radius: 0.375rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.15);
   z-index: 1000;
   display: none;
 }
@@ -297,7 +361,7 @@ select, input[type="checkbox"], input[type="radio"] {
 .band-name{font-family:var(--font-display);font-size:3rem;margin:0;letter-spacing:0.06em}
 .tagline{margin:0.5rem 0 1.25rem;color:var(--panel)}
 
-.btn{display:inline-block;padding:0.6rem 1rem;border-radius:6px;text-decoration:none;border:1px solid transparent;background:transparent;color:var(--text);cursor:pointer}
+.btn{display:inline-block;padding:0.6rem 1rem;border-radius:0.375rem;text-decoration:none;border:1px solid transparent;background:transparent;color:var(--text);cursor:pointer}
 .btn.primary{background:var(--accent);color:#fff}
 .btn.outline{border-color:rgba(0,0,0,0.08);}
 .btn.small{padding:0.35rem 0.6rem;font-size:0.9rem}
@@ -351,16 +415,21 @@ section{padding:3rem 0}
 
 /* Homepage-specific: push box down to reveal album art background */
 .page-home .show-promo-row{
-  margin-top: 50rem;
+  margin-top: 50rem; /* Intentionally kept in rem to maintain consistent vertical positioning */
 }
 
 .show-promo-row .next-show{
   flex: 0 0 auto; /* auto width for the teaser */
 }
+.show-promo-row .next-show h2{
+  margin-bottom: 24px; /* Space between "Upcoming Shows" header and text below */
+}
 .show-promo-row .next-show .next-show-meta{
   margin-left: auto;
   margin-right: auto;
   max-width: 70ch;
+  transform: translate(var(--show-text-translate-x, 0px), var(--show-text-translate-y, 0px));
+  transition: transform 180ms ease;
 }
 .show-promo-row .promo{
   flex: 0 0 auto; /* auto width so promo stays next to show */
@@ -372,9 +441,9 @@ section{padding:3rem 0}
   height:auto;
   object-fit:cover;
   object-position: var(--promo-object-position);
-  border-radius:10px;
+  border-radius:0.625rem;
   align-self:center;
-  transform: translate(var(--promo-translate-x, 0px), var(--promo-translate-y, 0px));
+  transform: translate(var(--promo-translate-x, 0), var(--promo-translate-y, 0));
   transition: transform 180ms ease;
 }
 
@@ -390,9 +459,18 @@ section{padding:3rem 0}
 .promo-item--3 img{width:100%;height:var(--promo3-height);}
 
 /* Individual image transforms using CSS variables */
-.promo-item--1 img{object-position:var(--promo1-object-position);transform:translate(var(--promo1-translate-x), var(--promo1-translate-y)) scale(var(--promo1-scale));}
-.promo-item--2 img{object-position:var(--promo2-object-position);transform:translate(var(--promo2-translate-x), var(--promo2-translate-y)) scale(var(--promo2-scale));}
-.promo-item--3 img{object-position:var(--promo3-object-position);transform:translate(var(--promo3-translate-x), var(--promo3-translate-y)) scale(var(--promo3-scale));}
+.promo-item--1 img{
+  object-position:var(--promo1-object-position);
+  transform:translate(var(--promo1-translate-x, 0), var(--promo1-translate-y, 0)) scale(var(--promo1-scale, 1)) !important;
+}
+.promo-item--2 img{
+  object-position:var(--promo2-object-position);
+  transform:translate(var(--promo2-translate-x, 0), var(--promo2-translate-y, 0)) scale(var(--promo2-scale, 1)) !important;
+}
+.promo-item--3 img{
+  object-position:var(--promo3-object-position);
+  transform:translate(var(--promo3-translate-x, 0), var(--promo3-translate-y, 0)) scale(var(--promo3-scale, 1)) !important;
+}
 
 @media (max-width:900px){
   .promo-item--1,
@@ -403,14 +481,15 @@ section{padding:3rem 0}
 /* News section inside show-promo box - wraps flex to force underneath */
 .show-promo-row .news-section{
   flex: 1 1 100%;
-  margin-top: -1rem;
-  padding-left: 6.2rem;
-  padding-right: 2rem;
-  padding-bottom: 1rem;
+  margin-top: -16px;
+  padding-left: 100px; /* Fixed pixels for consistency */
+  padding-right: 32px;
+  padding-bottom: 16px;
 }
+.show-promo-row .news-section h2,
 .show-promo-row .news-section h3{
   margin-top: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: 24px; /* Space between header and content */
 }
 .news-list{
   list-style: none;
@@ -425,12 +504,13 @@ section{padding:3rem 0}
 /* Engaging social links section inside the show/promo box */
 .show-promo-row .box-socials{
   flex: 1 1 100%;
-  margin-top: 0.5rem;
-  padding-left: 6.2rem;
-  padding-right: 2rem;
+  margin-top: 8px;
+  padding-left: 100px; /* Fixed pixels for consistency */
+  padding-right: 32px;
 }
+.show-promo-row .box-socials h2,
 .show-promo-row .box-socials h3{
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 24px 0; /* Space between header and content */
 }
 .show-promo-row .social-list{
   list-style: none;
@@ -471,21 +551,24 @@ section{padding:3rem 0}
 /* Booking section inside the show/promo box */
 .show-promo-row .box-booking{
   flex: 1 1 100%;
-  margin-top: 1rem;
-  padding-left: 6.2rem;
-  padding-right: 2rem;
+  margin-top: 16px;
+  padding-left: 100px; /* Fixed pixels for consistency */
+  padding-right: 32px;
 }
-.show-promo-row .box-booking h3{ margin: 0 0 0.75rem 0; }
+.show-promo-row .box-booking h2,
+.show-promo-row .box-booking h3{ 
+  margin: 0 0 24px 0; /* Space between header and content */
+}
 .booking-form{ display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem 1rem; }
 .booking-form .form-row{ display: flex; flex-direction: column; }
 .booking-form label{ font-size: 0.9rem; margin-bottom: 0.3rem; }
 .booking-form input,
-.booking-form textarea{ padding: 0.5rem 0.6rem; border-radius: 6px; border: 1px solid rgb(0, 0, 0); background: var(--panel); color: #ffffff; }
+.booking-form textarea{ padding: 0.5rem 0.6rem; border-radius: 0.375rem; border: 1px solid rgb(0, 0, 0); background: var(--panel); color: #ffffff; }
 .booking-form input:focus,
 .booking-form textarea:focus{ outline: none; border-color: #000; }
 .booking-form textarea{ grid-column: 1 / -1; }
 .booking-form .form-actions{ grid-column: 1 / -1; margin-top: 0.5rem; }
-.booking-form .btn{ padding: 0.5rem 0.9rem; border-radius: 8px; border: 1px solid rgba(0,0,0,0.2); background: rgb(70, 70, 70); color: inherit; cursor: pointer; }
+.booking-form .btn{ padding: 0.5rem 0.9rem; border-radius: 0.5rem; border: 1px solid rgba(0,0,0,0.2); background: rgb(70, 70, 70); color: inherit; cursor: pointer; }
 .booking-form .btn:hover{ background: #8a8a8a; }
 .booking-form .btn:disabled{ opacity: 0.6; cursor: not-allowed; }
 .booking-form .form-status{ grid-column: 1 / -1; margin-top: 0.5rem; font-size: 0.9rem; text-align: center; }
@@ -507,13 +590,13 @@ section{padding:3rem 0}
   .show-promo-row .box-socials{ padding-left: 1rem; padding-right: 1rem; }
   .show-promo-row .box-booking{ padding-left: 1rem; padding-right: 1rem; }
 
-  /* Stack promo images full-width and neutralize transforms for consistency */
+  /* Stack promo images full-width and neutralize transforms for consistency on mobile only */
   .promo-item--1,
   .promo-item--2,
   .promo-item--3{ flex: 1 1 100%; max-width: 100%; }
-  .promo-item--1 img{ transform: translate(0,0) scale(1); }
-  .promo-item--2 img{ transform: translate(0,0) scale(1); }
-  .promo-item--3 img{ transform: translate(0,0) scale(1); }
+  .promo-item--1 img{ transform: translate(0,0) scale(1) !important; }
+  .promo-item--2 img{ transform: translate(0,0) scale(1) !important; }
+  .promo-item--3 img{ transform: translate(0,0) scale(1) !important; }
 }
 
 /* ========== Scroll Hint Arrow ========== */
@@ -558,7 +641,7 @@ section{padding:3rem 0}
   margin:0 auto;
   aspect-ratio:16/9;
   background:#000;
-  border-radius:10px;
+  border-radius:0.625rem;
   overflow:hidden;
 }
 /* (Removed unused iframe rule; video uses <video> element) */
@@ -580,7 +663,7 @@ section{padding:3rem 0}
   margin:0 auto;
   aspect-ratio:16/9;
   background:#000;
-  border-radius:10px;
+  border-radius:0.625rem;
   overflow:hidden;
   position:relative;
 }
@@ -644,8 +727,8 @@ section{padding:3rem 0}
 /* About page content positioning */
 .show-promo-row .about{
   flex: 1 1 100%;
-  padding-left: 6.2rem;
-  padding-right: 2rem;
+  padding-left: 100px; /* Fixed pixels for consistency */
+  padding-right: 32px;
 }
 
 .show-promo-row .about .lead{
@@ -658,14 +741,14 @@ section{padding:3rem 0}
 }
 
 /* Members grid */
-.members-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1rem}
-.member{background:var(--panel);padding:1rem;border-radius:10px; text-align:center}
-.member img{width:100%;height:auto;border-radius:8px}
+.members-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px, 100%), 1fr));gap:1rem;margin-top:1rem}
+.member{background:var(--panel);padding:1rem;border-radius:0.625rem; text-align:center}
+.member img{width:100%;height:auto;border-radius:0.5rem}
 .role{color:var(--muted);margin-top:0.5rem}
 
 /* Release layout */
 .release{display:flex;gap:1rem;align-items:center}
-.album-art{width:180px;border-radius:8px}
+.album-art{width:clamp(120px, 12vw, 180px);border-radius:0.5rem}
 .release-info{flex:1}
 
 /* Events */
@@ -673,13 +756,13 @@ section{padding:3rem 0}
 .events-list li{padding:0.8rem 0;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;gap:1rem;align-items:center;justify-content:space-between}
 
 /* Gallery grid */
-.photo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.5rem}
-.thumb{background:none;border:0;padding:0;border-radius:8px;overflow:hidden}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(140px, 100%), 1fr));gap:0.5rem}
+.thumb{background:none;border:0;padding:0;border-radius:0.5rem;overflow:hidden}
 .thumb img{display:block;width:100%;height:100%;object-fit:cover}
 
 /* Lightbox */
 .lightbox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.8);z-index:120}
-.lightbox img{max-width:90%;max-height:80%;border-radius:8px}
+.lightbox img{max-width:90vw;max-height:80vh;border-radius:0.5rem}
 .lightbox-close{position:absolute;right:2rem;top:1.5rem;background:transparent;border:0;color:#fff;font-size:1.5rem}
 
 /* Respect the native `[hidden]` attribute: author CSS can override UA styles, so
@@ -690,9 +773,9 @@ section{padding:3rem 0}
 }
 
 /* Contact form */
-.contact-form{display:grid;gap:0.75rem;max-width:720px}
+.contact-form{display:grid;gap:0.75rem;max-width:min(90%, 720px)}
 .contact-form label{display:block}
-.contact-form input,.contact-form textarea{width:100%;padding:0.6rem;border-radius:8px;border:1px solid rgba(0,0,0,0.08);background:var(--panel);color:var(--text)}
+.contact-form input,.contact-form textarea{width:100%;padding:0.6rem;border-radius:0.5rem;border:1px solid rgba(0,0,0,0.08);background:var(--panel);color:var(--text)}
 .form-actions{display:flex;gap:0.5rem}
 .form-msg{color:var(--muted);margin-top:0.5rem}
 
@@ -714,11 +797,11 @@ section{padding:3rem 0}
 /* Home promo image: centered with optional full-width appearance.
   Replace `.promo-img` src in the HTML to change the image quickly. */
 .promo{margin:2rem 0;text-align:center}
-.promo-img{width:100%;max-width:1200px;height:auto;border-radius:10px;display:block;margin:0 auto}
+.promo-img{width:100%;max-width:min(85vw, 1200px);height:auto;border-radius:0.625rem;display:block;margin:0 auto}
 
 /* Social bar: horizontal row of icon links. Edit hrefs in HTML. */
 .social-bar{display:flex;gap:0.75rem;align-items:center;margin-top:1rem}
-.social-link{display:inline-flex;align-items:center;justify-content:center;padding:0.4rem;border-radius:6px;color:var(--text);background:transparent;text-decoration:none}
+.social-link{display:inline-flex;align-items:center;justify-content:center;padding:0.4rem;border-radius:0.375rem;color:var(--text);background:transparent;text-decoration:none}
 .social-link:hover{background:rgba(0,0,0,0.05)}
 
 /* Small helper: visually-hidden text for captions or screen-reader-only content */
@@ -744,3 +827,54 @@ section{padding:3rem 0}
 /* Helpful utility classes for quick edits */
 .text-center{text-align:center}
 .mt-2{margin-top:2rem}
+
+/* ========== Desktop Fixed Sizing ========== */
+/* Lock all sizes to fixed pixels for identical display across all browsers */
+@media (min-width: 1024px) {
+  /* Ensure base font size stays locked */
+  html {
+    font-size: 16px;
+  }
+  
+  /* Fixed container sizing */
+  .container {
+    max-width: var(--container-width);
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  
+  /* Keep content centered with fixed width */
+  .show-promo-row {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Fixed hero font size */
+  .band-name {
+    font-size: 48px;
+  }
+  
+  /* Fixed header spacing */
+  .header-inner {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    gap: 16px;
+  }
+  
+  /* Fixed logo size */
+  .brand .logo {
+    font-size: 30px;
+  }
+  
+  /* Fixed nav link sizes */
+  .main-nav a {
+    font-size: 16px;
+    padding: 6px 10px;
+  }
+  
+  /* Fixed search box size */
+  .site-search {
+    width: 180px;
+  }
+}
