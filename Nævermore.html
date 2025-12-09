@@ -111,36 +111,37 @@
         <aside class="next-show" aria-label="Next show teaser">
           <!-- Change these values to show the next scheduled date and venue -->
           <h2>- Upcoming Shows</h2>
-          <p class="next-show-meta"><time datetime="2025-12-12"><strong>Dec 12, 2025</time> — Chester Street Bar, Champaign, IL</strong><br><br><br><br>
-             <time datetime="2025-12-12"><strong>Dec 15, 2025</time> — The Canopy Club, Champaign, IL</strong><br><br><br><br>
-             <time datetime="2025-12-12"><strong>Dec 18, 2025</time> — Memphis on Main, Champaign, IL</strong>
-        
           
-          </p>
+          <!-- Show 1: Chester Street Bar -->
+          <div class="show-item">
+            <div class="show-info">
+              <p><time datetime="2025-12-12"><strong>Dec 12, 2025</strong></time> — <strong>Chester Street Bar</strong>, Champaign, IL</p>
+            </div>
+            <div class="show-image">
+              <img src="C Street.jpg" alt="Chester Street Bar">
+            </div>
+          </div>
+          
+          <!-- Show 2: The Canopy Club -->
+          <div class="show-item">
+            <div class="show-info">
+              <p><time datetime="2025-12-15"><strong>Dec 15, 2025</strong></time> — <strong>The Canopy Club</strong>, Champaign, IL</p>
+            </div>
+            <div class="show-image">
+              <img src="The Canopy.jpg" alt="The Canopy Club">
+            </div>
+          </div>
+          
+          <!-- Show 3: Memphis on Main -->
+          <div class="show-item">
+            <div class="show-info">
+              <p><time datetime="2025-12-18"><strong>Dec 18, 2025</strong></time> — <strong>Memphis on Main</strong>, Champaign, IL</p>
+            </div>
+            <div class="show-image">
+              <img src="Memphis on Main.jpg" alt="Memphis on Main">
+            </div>
+          </div>
         </aside>
-
-        <!-- Promo image gallery: three adjustable images (filenames are placeholders)
-             Each image's position, size, and scale can be controlled via CSS variables:
-             --promo1/2/3-width, --promo1/2/3-height, --promo1/2/3-translate-x/y,
-             --promo1/2/3-object-position, --promo1/2/3-scale.
-             Replace src values with your actual image paths. -->
-        <div class="promo-gallery" aria-label="Promotional images">
-          <!-- Promo image 1: styled via .promo-item--1 with individual size/position controls -->
-          <figure class="promo-item promo-item--1" role="group">
-            <img src="C Street.jpg" alt="" class="promo-img promo-img--1">
-            <figcaption class="sr-only">Promo image 1.</figcaption>
-          </figure>
-          <!-- Promo image 2: styled via .promo-item--2 -->
-          <figure class="promo-item promo-item--2" role="group">
-            <img src="The Canopy.jpg" alt="" class="promo-img promo-img--2">
-            <figcaption class="sr-only">Promo image 2.</figcaption>
-          </figure>
-          <!-- Promo image 3: styled via .promo-item--3 -->
-          <figure class="promo-item promo-item--3" role="group">
-            <img src="Memphis on Main.jpg" alt="" class="promo-img promo-img--3">
-            <figcaption class="sr-only">Promo image 3.</figcaption>
-          </figure>
-        </div>
 
         <!-- News section: add important updates here.
              This section sits below the promo gallery within the .show-promo-row box.
